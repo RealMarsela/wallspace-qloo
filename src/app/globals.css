@@ -1,0 +1,215 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+@import "../styles/motif.css";
+@import "../styles/signin.css";
+
+/* Wallspace base. Tokens live in src/styles/tokens.css; motif motion in src/styles/motif.css; primitives in docs/UI-KIT.md.
+   Legacy utility names (bg-ground, text-ink-2, border-rule, bg-heat, bg-picked ...) keep working; new ones are listed below. */
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-night: var(--night);
+  --color-night-2: var(--night-2);
+  --color-night-line: var(--night-line);
+  --color-on-night: var(--on-night);
+  --color-on-night-muted: var(--on-night-muted);
+  --color-signal: var(--signal);
+  --color-signal-soft: var(--signal-soft);
+  --color-signal-deep: var(--signal-deep);
+  --color-poster: var(--poster);
+  --color-poster-soft: var(--poster-soft);
+  --color-poster-deep: var(--poster-deep);
+  --color-cobalt: var(--cobalt);
+  --color-cobalt-soft: var(--cobalt-soft);
+  --color-cobalt-deep: var(--cobalt-deep);
+  --color-park: var(--park);
+  --color-park-soft: var(--park-soft);
+  --color-park-deep: var(--park-deep);
+  --color-lilac: var(--lilac);
+  --color-lilac-soft: var(--lilac-soft);
+  --color-lilac-deep: var(--lilac-deep);
+  /* legacy */
+  --color-ground: var(--ground);
+  --color-ground-2: var(--ground-2);
+  --color-rule: var(--rule);
+  --color-rule-2: var(--rule-2);
+  --color-heat: var(--heat);
+  --color-heat-soft: var(--heat-soft);
+  --color-heat-ink: var(--heat-ink);
+  --color-picked: var(--picked);
+  --color-picked-soft: var(--picked-soft);
+  --color-picked-ink: var(--picked-ink);
+  --color-guard: var(--guard);
+  --color-guard-soft: var(--guard-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  /* type */
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+  --font-sans: var(--font-body);
+  --text-display: var(--fs-display);
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.02em;
+  --text-h2: var(--fs-h2);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: var(--fs-h3);
+  --text-h3--line-height: 1.1;
+  --text-h3--letter-spacing: -0.015em;
+  --text-h4: var(--fs-h4);
+  --text-h4--line-height: 1.25;
+  --text-body: var(--fs-body);
+  --text-body--line-height: 1.45;
+  --text-small: var(--fs-small);
+  --text-small--line-height: 1.4;
+  --text-micro: var(--fs-micro);
+  --text-micro--line-height: 1.35;
+  /* shape, elevation, motion */
+  --radius-xs: var(--radius-xs);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow);
+  --shadow-lg: var(--shadow-lg);
+  --ease-out: var(--ease-out);
+  --container-content: var(--content);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+b,
+strong,
+em.em {
+  font-weight: 600;
+  font-style: normal;
+}
+
+::selection {
+  background: var(--signal);
+  color: #22211d;
+}
+
+.mono,
+code {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Content column: 1192px max with responsive side gutters. */
+.wrap {
+  width: 100%;
+  max-width: calc(var(--content) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--line-2) 0%, var(--panel) 40%, var(--line-2) 80%);
+  background-size: 200% 100%;
+  border-radius: var(--radius);
+  animation: ws-shimmer 1.4s linear infinite;
+}
+@keyframes ws-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Picked-face map marker (numbered): a small billboard face in park green on an ink frame. */
+.ws-shield {
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: 5px;
+  border: 2px solid #22211d;
+  background: var(--park);
+  color: #22211d;
+  font: 600 12px/1 var(--font-mono);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.ws-shield[data-selected="true"] {
+  background: var(--signal);
+  transform: scale(1.2);
+}
+
+.maplibregl-ctrl-attrib {
+  font-size: 10px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

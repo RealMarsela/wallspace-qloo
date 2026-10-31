@@ -1,0 +1,53 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "wallspace",
+  // worker/index.ts re-exports OpenNext's .open-next/worker.js plus the Durable Objects, Workflows and the cron handler.
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  // No public workers.dev address: the Pages project "wallspace" (edge/pages) fronts this Worker through a service binding.
+  "workers_dev": false,
+
+  "vars": {
+    "STORE_DRIVER": "d1",
+    "DATA_MODE": "app",
+    // Provider modes. Qloo is live only (30 Oct decision): a KV copy of an earlier live answer or a call to Qloo, never a recording or a fixture.
+    "QLOO_MODE": "live",
+    "TF_MODE": "live",
+    "TAVILY_MODE": "live",
+    // Hard Qloo call cap enforced by the QLOO_METER Durable Object (the key's 50,000-a-month pool is shared with one other project).
+    "QLOO_CAP_TOTAL": "6000",
+    "QLOO_CAP_DAY": "1500",
+    "APP_URL": "https://wallspace.pages.dev"
+    // Secrets (wrangler secret put, fed from the vault by scripts/deploy-secrets.sh): NEBIUS_API_KEY, TAVILY_API_KEY,
+    // QLOO_API_KEY (when it exists), WALLSPACE_INGEST_SECRET. Never NEBIUS_SA_CREDENTIALS.
+  },
+
+  // "0 19 * * *" = 03:00 Kuala Lumpur nightly: the re-scan Workflow (Token Factory, Tavily and cached Qloo only).
+  // "*/10 * * * *": read-back polls for the connectors (mail replies, CRM/sheet/calendar changes); worker/index.ts checks the expression.
+  "triggers": { "crons": ["0 19 * * *", "*/10 * * * *"] },
+
+  "d1_databases": [
+    { "binding": "WS_DB", "database_name": "wallspace", "database_id": "5d4d6d31-c2e1-4bf4-b2cb-3139acbf2285", "migrations_dir": "migrations" }
+  ],
+  "kv_namespaces": [{ "binding": "WS_KV", "id": "a15e51f5957a4e83bd05713a5e7e0474" }],
+  "r2_buckets": [{ "binding": "WS_BLOB", "bucket_name": "wallspace-blobs" }],
+
+  "durable_objects": {
+    "bindings": [
+      { "name": "RUN_ROOM", "class_name": "RunRoom" },
+      { "name": "QLOO_METER", "class_name": "QlooMeter" },
+      { "name": "TAVILY_BUDGET", "class_name": "TavilyBudget" }
+    ]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["RunRoom", "QlooMeter", "TavilyBudget"] }],
+
+  "workflows": [
+    { "name": "wallspace-plan-run", "binding": "PLAN_RUN", "class_name": "PlanRun" },
+    { "name": "wallspace-rescan", "binding": "RESCAN", "class_name": "Rescan" },
+    { "name": "wallspace-eval-run", "binding": "EVAL_RUN", "class_name": "EvalRun" }
+  ],
+
+  "observability": { "enabled": true }
+}

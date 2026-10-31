@@ -1,0 +1,20 @@
+/* How it works route map (lane UI-2): a three-lane street drawn in CSS so it stretches with the page. Lane markings crawl
+   slowly like traffic; under reduced motion they stand still. */
+.ws-route-lane {
+  width: 10px;
+  border-radius: 2px;
+  background:
+    repeating-linear-gradient(to bottom, var(--mark, #22211d) 0 8px, transparent 8px 18px) center / 2px 100% no-repeat,
+    var(--lane);
+  animation: ws-route-crawl 7s linear infinite;
+}
+@keyframes ws-route-crawl {
+  to {
+    background-position: center 180px, 0 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ws-route-lane {
+    animation: none;
+  }
+}

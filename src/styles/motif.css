@@ -1,0 +1,297 @@
+/* Motif motion: street ribbons draw in when their InView wrapper enters the viewport, then lane lines crawl like traffic.
+   Stops pop in; the hero window rises; rows stagger. Reduced motion: everything renders in its final state, nothing loops. */
+
+.ws-draw {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+}
+[data-inview="true"] .ws-draw {
+  animation: ws-draw var(--dur-draw) var(--ease-out) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes ws-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.ws-lane {
+  opacity: 0;
+}
+[data-inview="true"] .ws-lane {
+  animation: ws-fade 500ms ease-out forwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes ws-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+.ws-crawl {
+  animation: ws-crawl var(--dur-crawl) linear infinite;
+}
+@keyframes ws-crawl {
+  to {
+    stroke-dashoffset: var(--crawl-to, -40px);
+  }
+}
+
+.ws-pop {
+  opacity: 0;
+  transform: scale(0.96);
+}
+[data-inview="true"] .ws-pop {
+  animation: ws-pop var(--dur-slow) var(--ease-out) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes ws-pop {
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.ws-fade-up {
+  opacity: 0;
+  transform: translateY(16px);
+}
+[data-inview="true"] .ws-fade-up,
+.ws-fade-up[data-inview="true"] {
+  animation: ws-rise 600ms var(--ease-out) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+
+/* Hero product window: rises 24px and fades in after the headline. Pure CSS, no JS needed. */
+.ws-rise {
+  animation: ws-rise 800ms var(--ease-out) both;
+  animation-delay: var(--delay, 350ms);
+}
+@keyframes ws-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.ws-stagger > * {
+  animation: ws-row 420ms var(--ease-out) both;
+  animation-delay: calc(var(--base, 700ms) + var(--i, 0) * 30ms);
+}
+@keyframes ws-row {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Arrow nudge on buttons and text links. */
+.ws-arrow {
+  transition: transform var(--dur) var(--ease-out);
+}
+.group:hover .ws-arrow,
+.group:focus-visible .ws-arrow {
+  transform: translateX(2px);
+}
+
+/* Backgrounds */
+.ws-dots {
+  background-image: radial-gradient(circle, var(--dot, rgb(255 255 255 / 0.09)) 1.4px, transparent 1.6px);
+  background-size: var(--dot-gap, 18px) var(--dot-gap, 18px);
+}
+.ws-pinstripe {
+  background-image: repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 7px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-draw,
+  [data-inview="true"] .ws-draw {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+  .ws-crawl {
+    animation: none;
+  }
+  .ws-lane,
+  [data-inview="true"] .ws-lane {
+    opacity: 1;
+    animation: none;
+  }
+  .ws-pop,
+  .ws-fade-up,
+  [data-inview="true"] .ws-pop,
+  [data-inview="true"] .ws-fade-up,
+  .ws-rise,
+  .ws-stagger > * {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+/* Billboard stops in SVG: logos greyscale at rest, colour on hover or keyboard focus. */
+.ws-stop-link {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.ws-stop-logo {
+  filter: grayscale(1) contrast(0.9) opacity(0.75);
+  transition: filter var(--dur) var(--ease-out);
+}
+.ws-stop-link:hover .ws-stop-logo,
+.ws-stop-link:focus-visible .ws-stop-logo {
+  filter: none;
+}
+.ws-stop-link:focus-visible {
+  outline: none;
+}
+.ws-stop-link:focus-visible rect:nth-of-type(2) {
+  stroke: var(--focus);
+}
+
+/* Arrow after the label for links whose markup we do not own (StartLink): same nudge as the Button arrow. */
+.ws-after-arrow::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  margin-right: -2px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 10h11M11 5.5 15.5 10 11 14.5'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 10h11M11 5.5 15.5 10 11 14.5'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform var(--dur) var(--ease-out);
+}
+.ws-after-arrow:hover::after,
+.ws-after-arrow:focus-visible::after {
+  transform: translateX(2px);
+}
+
+/* Photo-read scan line: sweeps the viewfinder twice when the card enters view. */
+.ws-scan {
+  opacity: 0;
+}
+[data-inview="true"] .ws-scan {
+  animation: ws-scan 1.1s var(--ease-in-out) 2 forwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes ws-scan {
+  0% {
+    opacity: 0.8;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(92px);
+  }
+}
+
+/* Typed line: reveals left to right in steps. */
+.ws-type {
+  clip-path: inset(0 100% 0 0);
+}
+[data-inview="true"] .ws-type {
+  animation: ws-type 900ms steps(24, end) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes ws-type {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Bar fill from zero to its width. */
+.ws-bar {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+[data-inview="true"] .ws-bar {
+  animation: ws-bar 1s var(--ease-out) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes ws-bar {
+  to {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-scan,
+  [data-inview="true"] .ws-scan {
+    animation: none;
+    opacity: 0;
+  }
+  .ws-type,
+  .ws-bar,
+  [data-inview="true"] .ws-type,
+  [data-inview="true"] .ws-bar {
+    animation: none;
+    clip-path: none;
+    transform: none;
+  }
+}
+
+/* Gauge arc fills from empty to its value. */
+[data-inview="true"] .ws-gauge {
+  animation: ws-gauge 1.1s var(--ease-out) both;
+}
+@keyframes ws-gauge {
+  from {
+    stroke-dashoffset: var(--gauge-from);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-inview="true"] .ws-gauge {
+    animation: none;
+  }
+}
+
+/* Logo wall: the brand's one-colour mark (mask, theme ink) at rest; the official colour file on hover/focus in light
+   mode. In dark mode the mark brightens instead, since several official files are dark text. */
+.ws-logo {
+  position: relative;
+  display: block;
+}
+.ws-logo-mono {
+  position: absolute;
+  inset: 0;
+  background: var(--muted);
+  -webkit-mask: var(--logo) center / contain no-repeat;
+  mask: var(--logo) center / contain no-repeat;
+  transition: opacity var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out);
+}
+.ws-logo img {
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease-out);
+}
+.group:hover .ws-logo img,
+.group:focus-visible .ws-logo img {
+  opacity: 1;
+}
+.group:hover .ws-logo-mono,
+.group:focus-visible .ws-logo-mono {
+  opacity: 0;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .group:hover .ws-logo img,
+  :root:not([data-theme="light"]) .group:focus-visible .ws-logo img {
+    opacity: 0;
+  }
+  :root:not([data-theme="light"]) .group:hover .ws-logo-mono,
+  :root:not([data-theme="light"]) .group:focus-visible .ws-logo-mono {
+    opacity: 1;
+    background: var(--ink);
+  }
+}
+:root[data-theme="dark"] .group:hover .ws-logo img {
+  opacity: 0;
+}
+:root[data-theme="dark"] .group:hover .ws-logo-mono {
+  opacity: 1;
+  background: var(--ink);
+}

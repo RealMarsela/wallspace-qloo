@@ -1,0 +1,61 @@
+/* App shell (lane UI-2): the sidebar's street edge, the phone drawer, floating panels. Tokens only; motion stops under reduced motion. */
+
+/* Sidebar right edge drawn as a narrow street: night asphalt with a dashed signal lane line that crawls like traffic. */
+.ws-edge-street {
+  background:
+    repeating-linear-gradient(to bottom, var(--signal) 0 9px, transparent 9px 21px) center / 1.5px 100% no-repeat,
+    var(--night);
+  animation: ws-edge-crawl 9s linear infinite;
+}
+@keyframes ws-edge-crawl {
+  to {
+    background-position: center 210px, 0 0;
+  }
+}
+
+/* Floating panels (menus, selects, the flight calendar) open with a short scale-in. */
+.ws-pop-in {
+  animation: ws-pop-in var(--dur-fast) var(--ease-out);
+  transform-origin: top;
+}
+@keyframes ws-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-2px) scale(0.98);
+  }
+}
+
+/* Phone drawer: a native dialog that slides in from the left. */
+.ws-drawer[open] {
+  animation: ws-drawer-in var(--dur-slow) var(--ease-out);
+}
+.ws-drawer::backdrop {
+  background: rgb(34 33 29 / 0.45);
+  backdrop-filter: blur(2px);
+}
+@keyframes ws-drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+/* A row that just arrived in the live run trace. */
+.ws-row-in {
+  animation: ws-row-in 420ms var(--ease-out);
+}
+@keyframes ws-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+    background: var(--signal-soft);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-edge-street,
+  .ws-pop-in,
+  .ws-drawer[open],
+  .ws-row-in {
+    animation: none;
+  }
+}

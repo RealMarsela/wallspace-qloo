@@ -1,0 +1,101 @@
+/* Sign-in page: restyles the shared AuthForm (owned by the auth lane) from the outside, so its behaviour and test IDs stay
+   untouched. Scoped to .ws-auth, unlayered so it wins over the form's own utility classes. */
+.ws-auth main[data-testid] {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 0;
+}
+.ws-auth h1 {
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.ws-auth form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 28px;
+}
+.ws-auth form > * + * {
+  margin-top: 0;
+}
+.ws-auth form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--fs-small);
+  color: var(--ink);
+}
+.ws-auth form input {
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 16px;
+  transition: border-color var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+.ws-auth form input:hover {
+  border-color: color-mix(in oklab, var(--line), var(--ink) 25%);
+}
+.ws-auth form input:focus {
+  outline: none;
+  border-color: var(--cobalt);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--cobalt) 22%, transparent);
+}
+.ws-auth form button[type="submit"],
+.ws-auth main > button[type="button"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  margin-top: 8px;
+  border-radius: var(--radius);
+  font-size: 16px;
+  transition: background-color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), transform var(--dur-fast);
+}
+.ws-auth form button[type="submit"] {
+  border: 0;
+  background: var(--ink);
+  color: var(--paper);
+}
+.ws-auth form button[type="submit"]:hover {
+  background: var(--ink-2);
+}
+.ws-auth form button[type="submit"]:active {
+  transform: translateY(1px);
+}
+.ws-auth form button[type="submit"]:disabled {
+  opacity: 0.6;
+}
+.ws-auth main > button[type="button"] {
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+.ws-auth main > button[type="button"]:hover {
+  border-color: var(--ink);
+}
+.ws-auth [role="alert"] {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--poster-soft);
+  color: var(--poster-deep);
+  font-size: var(--fs-small);
+}
+.ws-auth main > p:last-child {
+  margin-top: 28px;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+.ws-auth main > p:last-child button {
+  color: var(--ink);
+  text-underline-offset: 4px;
+}

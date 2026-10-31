@@ -1,0 +1,23 @@
+# Wallspace Slack app manifest. api.slack.com/apps -> Create New App -> From a manifest -> pick the workspace -> paste this.
+# Then Install to Workspace, copy the Bot User OAuth Token (xoxb-...) and the Signing Secret (Basic Information) as Worker
+# secrets WALLSPACE_SLACK_BOT_TOKEN and WALLSPACE_SLACK_SIGNING_SECRET, and put the approvals channel id in WALLSPACE_SLACK_CHANNEL.
+display_information:
+  name: Wallspace
+  description: Approve outdoor plans in Slack. Sample brand, faces and rates are labelled samples.
+  background_color: "#1c1d1f"
+features:
+  bot_user:
+    display_name: Wallspace
+    always_online: true
+oauth_config:
+  scopes:
+    bot:
+      - chat:write
+      - chat:write.public
+settings:
+  interactivity:
+    is_enabled: true
+    request_url: https://wallspace.pages.dev/api/connectors/slack/interact
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false
