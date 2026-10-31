@@ -42,6 +42,16 @@ turns those two answers into a ranked, budgeted plan with copy written for each 
 - **Media-owner view.** `/app/owner` lists faces; each opens an audience card built live from Qloo. `/faces/<id>` is the
   shareable version of a card, the link used in pitch e-mails.
 
+
+## Screenshots
+
+| | |
+|---|---|
+| ![Qloo heatmap and picks](docs/screenshots/01-heatmap.png) | ![Face sheet with Qloo block tags and lift](docs/screenshots/02-face-ATL-0046.png) |
+| ![Media-owner audience card from Qloo](docs/screenshots/03-owner-card-ATL-0020.png) | ![Agent run trace with the Qloo tool calls](docs/screenshots/04-run-qloo-steps.png) |
+
+All screens are from the live site; Porchlight Comedy Tour is the sample brand.
+
 ## The Qloo calls, and what each one decides
 
 All calls go to the Qloo hackathon API from the server. One function per call lives in `src/server/qloo/endpoints.ts`.
